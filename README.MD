@@ -10,6 +10,8 @@
 7. Prettier
 8. Yarn
 9. Editor config
+10. Yup
+11. Json Web Token
 
 ## Instalação das dependências principais
 
