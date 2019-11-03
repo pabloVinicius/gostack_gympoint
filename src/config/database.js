@@ -4,7 +4,7 @@ module.exports = {
   host: 'localhost',
   username: 'postgres',
   password: '123456',
-  database: 'gympass',
+  database: 'gympoint',
   define: {
     timestamps: true,
     underscored: true,
