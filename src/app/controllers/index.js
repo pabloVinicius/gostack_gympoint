@@ -1,4 +1,5 @@
 import SessionController from './SessionController';
 import StudentController from './StudentController';
+import PlanController from './PlanController';
 
-export { SessionController, StudentController };
+export { SessionController, StudentController, PlanController };

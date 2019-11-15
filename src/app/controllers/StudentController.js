@@ -3,7 +3,12 @@ import { Student } from '../models';
 
 class StudentController {
   async index(req, res) {
-    const students = await Student.findAll();
+    const { perPage = 20, page = 0 } = req.params;
+
+    const students = await Student.findAll({
+      offset: page * perPage, // witch page we are looking for
+      limit: perPage, // number of entries for page
+    });
 
     if (students.length) {
       return res.json({ students });
