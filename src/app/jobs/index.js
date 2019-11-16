@@ -1,3 +1,4 @@
 import RegistrationMail from './RegistrationMail';
+import HelpOrderAnswerMail from './HelpOrderAnswerMail';
 
-export { RegistrationMail };
+export { RegistrationMail, HelpOrderAnswerMail };

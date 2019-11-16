@@ -1,6 +1,8 @@
 import * as Yup from 'yup';
 import { HelpOrder, Student } from '../models';
 import { haveAtLeastOneParameter } from '../helpers/CommonHelpers';
+import { Queue } from '../../lib';
+import { HelpOrderAnswerMail } from '../jobs';
 
 class GymHelpOrderController {
   async index(req, res) {
@@ -76,6 +78,16 @@ class GymHelpOrderController {
     await helpOrder.update({
       answer: req.body.answer,
       answer_at: new Date(),
+    });
+
+    const { student, id: helpOrderId, answer, answer_at, question } = helpOrder;
+
+    await Queue.add(HelpOrderAnswerMail.key, {
+      id: helpOrderId,
+      student,
+      answer,
+      question,
+      answer_at,
     });
 
     return res.json({ helpOrder });
