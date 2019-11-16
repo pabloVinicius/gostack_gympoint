@@ -26,7 +26,8 @@ class CheckinController {
         .status(404)
         .json({ error: 'No checkins found for this student.' });
     }
-    return res.json({ checkins, pages: Math.ceil(count / perPage) });
+    const pages = Math.ceil(count / perPage);
+    return res.json({ checkins, pages, count });
   }
 
   async store(req, res) {

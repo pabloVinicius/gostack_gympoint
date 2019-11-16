@@ -4,19 +4,20 @@ import { haveAtLeastOneParameter } from '../helpers/CommonHelpers';
 
 class PlanController {
   async index(req, res) {
-    const { perPage = 20, page = 0 } = req.params;
+    const { perPage = 5, page = 0 } = req.params;
 
-    const plans = await Plan.findAll({
+    const { rows: plans, count } = await Plan.findAndCountAll({
       where: { disabled_at: null },
       offset: page * perPage, // witch page we are looking for
       limit: perPage, // number of entries for page
     });
 
-    if (plans.length) {
-      return res.json({ plans });
+    if (plans.length === 0) {
+      return res.status(404).json({ error: 'No plan found' });
     }
 
-    return res.status(404).json({ error: 'No plan found' });
+    const pages = Math.ceil(count / perPage);
+    return res.json({ plans, pages, count });
   }
 
   async store(req, res) {

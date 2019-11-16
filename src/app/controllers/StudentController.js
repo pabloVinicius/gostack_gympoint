@@ -3,18 +3,19 @@ import { Student } from '../models';
 
 class StudentController {
   async index(req, res) {
-    const { perPage = 20, page = 0 } = req.params;
+    const { perPage = 5, page = 0 } = req.params;
 
-    const students = await Student.findAll({
+    const { rows: students, count } = await Student.findAndCountAll({
       offset: page * perPage, // witch page we are looking for
       limit: perPage, // number of entries for page
     });
 
-    if (students.length) {
-      return res.json({ students });
+    if (students.length === 0) {
+      return res.status(404).json({ error: 'No student found' });
     }
 
-    return res.status(404).json({ error: 'No student found' });
+    const pages = Math.ceil(count / perPage);
+    return res.json({ students, pages, count });
   }
 
   async store(req, res) {

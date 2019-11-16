@@ -7,9 +7,9 @@ import { RegistrationMail } from '../jobs';
 
 class RegistrationController {
   async index(req, res) {
-    const { page = 0, perPage = 20 } = req.query;
+    const { page = 0, perPage = 5 } = req.query;
 
-    const registrations = await Registration.findAll({
+    const { rows: registrations, count } = await Registration.findAndCountAll({
       where: { disabled_at: null },
       limit: perPage,
       offset: page * perPage,
@@ -35,11 +35,12 @@ class RegistrationController {
       ],
     });
 
-    if (registrations.length) {
-      return res.json({ registrations });
+    if (registrations.length === 0) {
+      return res.status(404).json({ error: 'No registration found.' });
     }
 
-    return res.status(404).json({ error: 'No registration found.' });
+    const pages = Math.ceil(count / perPage);
+    return res.json({ registrations, pages, count });
   }
 
   async store(req, res) {
