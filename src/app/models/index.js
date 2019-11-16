@@ -3,5 +3,6 @@ import Student from './Student';
 import Plan from './Plan';
 import Registration from './Registration';
 import Checkin from './Checkin';
+import HelpOrder from './HelpOrder';
 
-export { User, Student, Plan, Registration, Checkin };
+export { User, Student, Plan, Registration, Checkin, HelpOrder };

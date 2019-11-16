@@ -3,6 +3,8 @@ import StudentController from './StudentController';
 import PlanController from './PlanController';
 import RegistrationController from './RegistrationController';
 import CheckinController from './CheckinController';
+import HelpOrderController from './HelpOrderController';
+import GymHelpOrderController from './GymHelpOrderController';
 
 export {
   SessionController,
@@ -10,4 +12,6 @@ export {
   PlanController,
   RegistrationController,
   CheckinController,
+  GymHelpOrderController,
+  HelpOrderController,
 };
