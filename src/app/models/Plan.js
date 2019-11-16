@@ -8,6 +8,7 @@ class Plan extends Model {
         title: Sequelize.STRING,
         price: Sequelize.INTEGER,
         duration: Sequelize.INTEGER,
+        disabled_at: Sequelize.DATE,
         textualPrice: {
           type: Sequelize.VIRTUAL,
           get() {

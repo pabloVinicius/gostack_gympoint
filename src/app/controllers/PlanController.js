@@ -7,6 +7,7 @@ class PlanController {
     const { perPage = 20, page = 0 } = req.params;
 
     const plans = await Plan.findAll({
+      where: { disabled_at: null },
       offset: page * perPage, // witch page we are looking for
       limit: perPage, // number of entries for page
     });
@@ -75,9 +76,28 @@ class PlanController {
       });
     }
 
-    const plan = await Plan.findByPk(req.params.id);
+    const { disabled_at } = req.body;
+
+    const plan =
+      disabled_at === undefined
+        ? // normal updating
+          await Plan.findOne({
+            where: { id: req.params.id, disabled_at: null },
+          })
+        : // trying to enable registration again
+          await Plan.findByPk(req.params.id);
     if (!plan) {
-      return res.status(404).json({ error: 'Plan does not exists' });
+      return res.status(404).json({ error: 'Plan not found.' });
+    }
+
+    /*
+      Check if user has passed disabled_at and it is null (to enable plan again)
+    */
+    if (disabled_at !== undefined && disabled_at !== null) {
+      return res.status(400).json({
+        error:
+          'You can only pass disabled_at if it have null value in order to enable plan again.',
+      });
     }
 
     const updated = await plan.update(req.body);
@@ -85,23 +105,19 @@ class PlanController {
   }
 
   async delete(req, res) {
-    Plan.destroy({
-      where: {
-        id: req.params.id,
-      },
-    })
-      .then(response => {
-        if (response === 0) {
-          throw new Error('No plan found with this id');
-        }
-        return res.json({ ok: 'Plan deleted' });
-      })
-      .catch(error => {
-        return res.status(400).json({
-          error: 'Was not possible to delete the plan',
-          message: error.message,
-        });
-      });
+    /*
+      Check if registration exists
+    */
+    const plan = await Plan.findByPk(req.params.id);
+    if (!plan) {
+      return res.status(404).json({ error: 'Plan not found.' });
+    }
+
+    plan.disabled_at = new Date();
+
+    await plan.save();
+
+    return res.json({ ok: 'Plan disabled.' });
   }
 }
 
