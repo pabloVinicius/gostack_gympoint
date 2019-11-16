@@ -8,9 +8,17 @@ class RegistrationController {
     const { page = 0, perPage = 20 } = req.query;
 
     const registrations = await Registration.findAll({
+      where: { disabled_at: null },
       limit: perPage,
       offset: page * perPage,
-      attributes: ['id', 'start_date', 'end_date', 'price', 'textualPrice'],
+      attributes: [
+        'id',
+        'start_date',
+        'end_date',
+        'price',
+        'textualPrice',
+        'disabled_at',
+      ],
       include: [
         {
           model: Student,
@@ -107,15 +115,22 @@ class RegistrationController {
       });
     }
 
+    const { start_date, student_id, plan_id, disabled_at } = req.body;
+
     /*
       Check if registration exists
     */
-    const registration = await Registration.findByPk(req.params.id);
+    const registration =
+      disabled_at === undefined
+        ? // normal updating
+          await Registration.findOne({
+            where: { id: req.params.id, disabled_at: null },
+          })
+        : // trying to enable registration again
+          await Registration.findByPk(req.params.id);
     if (!registration) {
       return res.status(404).json({ error: 'Registration not found.' });
     }
-
-    const { start_date, student_id, plan_id } = req.body;
 
     /*
       Check if date is before the creation date
@@ -125,6 +140,16 @@ class RegistrationController {
       return res.status(400).json({
         error:
           'You can not update the start_date with a date before the creation date.',
+      });
+    }
+
+    /*
+      Check if user has passed disabled_at and it is null (to enable registration again)
+    */
+    if (disabled_at !== undefined && disabled_at !== null) {
+      return res.status(400).json({
+        error:
+          'You can only pass disabled_at if it have null value in order to enable registration again.',
       });
     }
 
@@ -153,6 +178,22 @@ class RegistrationController {
     });
 
     return res.json({ registration });
+  }
+
+  async delete(req, res) {
+    /*
+      Check if registration exists
+    */
+    const registration = await Registration.findByPk(req.params.id);
+    if (!registration) {
+      return res.status(404).json({ error: 'Registration not found.' });
+    }
+
+    registration.disabled_at = new Date();
+
+    await registration.save();
+
+    return res.json({ ok: 'Registration disabled.' });
   }
 }
 
