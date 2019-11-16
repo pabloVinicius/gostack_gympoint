@@ -1,23 +1,17 @@
 import Sequelize, { Model } from 'sequelize';
 import { convertCentsToMoney } from '../helpers/PlanHelpers';
 
-class Plan extends Model {
+class Registration extends Model {
   static init(sequelize) {
     super.init(
       {
-        title: Sequelize.STRING,
+        start_date: Sequelize.DATE,
+        end_date: Sequelize.DATE,
         price: Sequelize.INTEGER,
-        duration: Sequelize.INTEGER,
         textualPrice: {
           type: Sequelize.VIRTUAL,
           get() {
             return convertCentsToMoney(this.price);
-          },
-        },
-        totalPrice: {
-          type: Sequelize.VIRTUAL,
-          get() {
-            return convertCentsToMoney(this.price * this.duration);
           },
         },
       },
@@ -28,6 +22,11 @@ class Plan extends Model {
 
     return this;
   }
+
+  static associate(models) {
+    this.belongsTo(models.Student, { foreignKey: 'student_id', as: 'student' });
+    this.belongsTo(models.Plan, { foreignKey: 'plan_id', as: 'plan' });
+  }
 }
 
-export default Plan;
+export default Registration;

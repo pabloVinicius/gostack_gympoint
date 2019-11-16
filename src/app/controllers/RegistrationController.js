@@ -1,0 +1,159 @@
+import * as Yup from 'yup';
+import { addMonths, parseISO, isBefore } from 'date-fns';
+import { Registration, Student, Plan } from '../models';
+import { haveAtLeastOneParameter } from '../helpers/CommonHelpers';
+
+class RegistrationController {
+  async index(req, res) {
+    const { page = 0, perPage = 20 } = req.query;
+
+    const registrations = await Registration.findAll({
+      limit: perPage,
+      offset: page * perPage,
+      attributes: ['id', 'start_date', 'end_date', 'price', 'textualPrice'],
+      include: [
+        {
+          model: Student,
+          as: 'student',
+          attributes: ['id', 'name', 'email', 'age', 'height', 'weight'],
+        },
+        {
+          model: Plan,
+          as: 'plan',
+          attributes: ['id', 'title', 'price', 'textualPrice', 'duration'],
+        },
+      ],
+    });
+
+    if (registrations.length) {
+      return res.json({ registrations });
+    }
+
+    return res.status(404).json({ error: 'No registration found.' });
+  }
+
+  async store(req, res) {
+    const schema = Yup.object().shape({
+      student_id: Yup.number()
+        .integer()
+        .required(),
+      plan_id: Yup.number()
+        .integer()
+        .required(),
+      start_date: Yup.date()
+        .min(new Date())
+        .required(),
+    });
+
+    /*
+      Check schema validation
+    */
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation failed.' });
+    }
+
+    const { student_id, plan_id, start_date } = req.body;
+
+    /*
+      Check student exists
+    */
+    const student = await Student.findByPk(student_id);
+    if (!student) {
+      return res.status(400).json({ error: 'Student not found.' });
+    }
+
+    /*
+      Check plan exists
+    */
+    const plan = await Plan.findByPk(plan_id);
+    if (!plan) {
+      return res.status(400).json({ error: 'Plan not found.' });
+    }
+
+    const { duration, price: planPrice } = plan;
+    const price = duration * planPrice;
+    const registration = await Registration.create({
+      ...req.body,
+      end_date: addMonths(parseISO(start_date), 3),
+      price,
+    });
+
+    return res.json({ registration });
+  }
+
+  async update(req, res) {
+    const schema = Yup.object().shape({
+      student_id: Yup.number().integer(),
+      plan_id: Yup.number().integer(),
+      start_date: Yup.date(),
+    });
+
+    /*
+      Check schema validation
+    */
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation failed.' });
+    }
+
+    /*
+      Check if user has sent at least one parameter
+    */
+    const parameters = ['student_id', 'plan_id', 'start_date'];
+    if (!haveAtLeastOneParameter(parameters, req.body)) {
+      return res.status(400).json({
+        error: `You have to send at least one of the following parameters: ${parameters.join(
+          ', '
+        )}`,
+      });
+    }
+
+    /*
+      Check if registration exists
+    */
+    const registration = await Registration.findByPk(req.params.id);
+    if (!registration) {
+      return res.status(404).json({ error: 'Registration not found.' });
+    }
+
+    const { start_date, student_id, plan_id } = req.body;
+
+    /*
+      Check if date is before the creation date
+    */
+    const { createdAt } = registration;
+    if (isBefore(parseISO(start_date), createdAt)) {
+      return res.status(400).json({
+        error:
+          'You can not update the start_date with a date before the creation date.',
+      });
+    }
+
+    /*
+      Check student exists
+    */
+    const student = await Student.findByPk(student_id);
+    if (!student) {
+      return res.status(400).json({ error: 'Student not found.' });
+    }
+
+    /*
+      Check plan exists
+    */
+    const plan = await Plan.findByPk(plan_id);
+    if (!plan) {
+      return res.status(400).json({ error: 'Plan not found.' });
+    }
+
+    const { duration, price: planPrice } = plan;
+    const price = duration * planPrice;
+    await registration.update({
+      ...req.body,
+      end_date: addMonths(parseISO(start_date), 3),
+      price,
+    });
+
+    return res.json({ registration });
+  }
+}
+
+export default new RegistrationController();
