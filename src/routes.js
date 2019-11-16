@@ -5,6 +5,7 @@ import {
   StudentController,
   PlanController,
   RegistrationController,
+  CheckinController,
 } from './app/controllers';
 import { authMiddleware } from './app/middlewares';
 
@@ -12,6 +13,9 @@ const routes = new Router();
 
 routes.get('/', (req, res) => res.json({ message: 'API is running' }));
 routes.post('/session', SessionController.store);
+
+routes.post('/students/:id/checkin', CheckinController.store);
+routes.get('/students/:id/checkin', CheckinController.index);
 
 routes.use(authMiddleware);
 
