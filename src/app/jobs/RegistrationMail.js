@@ -1,3 +1,4 @@
+import { format, parseISO } from 'date-fns';
 import { Mail } from '../../lib';
 
 class RegistrationMail {
@@ -14,12 +15,18 @@ class RegistrationMail {
     await Mail.sendMail({
       to: `${name} <${email}>`,
       subject: 'Matrícula efetuada na Gympoint',
-      text: `Parabéns, você acaba de ser
-      matriculado na Gympoint. Você escolheu o plano ${title},
-      começando na data ${start_date}, com duração de ${duration} meses
-      e com um custo total de ${textualPrice}`,
-      //template: 'registration',
-      //context: {},
+      template: 'registration',
+      context: {
+        student: name,
+        plan: {
+          duration,
+          title,
+        },
+        registration: {
+          start_date: format(parseISO(start_date), 'dd/MM/yyyy'),
+          total_price: textualPrice,
+        },
+      },
     });
   }
 }
