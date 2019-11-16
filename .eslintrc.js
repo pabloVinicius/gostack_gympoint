@@ -21,6 +21,8 @@ module.exports = {
     "class-methods-use-this": "off", //nem sempre os métodos vão usar this
     "no-param-reassign": "off", //permite manipular o valor de um parâmetro
     "camelcase": "off", //desabilita a verificação de camel case
-    "no-unused-vars": ["error", { "argsIgnorePattern": "next"}] //permite declarar a variável next mesmo sem utilizar, necessário em alguns casos
+    "no-unused-vars": ["error", { "argsIgnorePattern": "next" }], //permite declarar a variável next mesmo sem utilizar, necessário em alguns casos
+    "import/prefer-default-export": "off",
+    "spaced-comment": "off"
   },
 };

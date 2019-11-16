@@ -2,6 +2,8 @@ import * as Yup from 'yup';
 import { addMonths, parseISO, isBefore } from 'date-fns';
 import { Registration, Student, Plan } from '../models';
 import { haveAtLeastOneParameter } from '../helpers/CommonHelpers';
+import { Queue } from '../../lib'; //import always the queue first
+import { RegistrationMail } from '../jobs';
 
 class RegistrationController {
   async index(req, res) {
@@ -84,6 +86,12 @@ class RegistrationController {
       ...req.body,
       end_date: addMonths(parseISO(start_date), 3),
       price,
+    });
+
+    await Queue.add(RegistrationMail.key, {
+      registration,
+      plan,
+      student,
     });
 
     return res.json({ registration });
