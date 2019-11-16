@@ -19,6 +19,15 @@ class CheckinController {
       where: { student_id: id },
       offset: page * perPage,
       limit: perPage,
+      attributes: ['id', 'created_at'],
+      include: [
+        {
+          model: Student,
+          foreignKey: 'student_id',
+          as: 'student',
+          attributes: ['id', 'name', 'email'],
+        },
+      ],
     });
 
     if (checkins.length === 0) {
