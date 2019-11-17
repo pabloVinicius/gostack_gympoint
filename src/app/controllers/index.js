@@ -5,6 +5,7 @@ import RegistrationController from './RegistrationController';
 import CheckinController from './CheckinController';
 import HelpOrderController from './HelpOrderController';
 import GymHelpOrderController from './GymHelpOrderController';
+import UserController from './UserController';
 
 export {
   SessionController,
@@ -14,4 +15,5 @@ export {
   CheckinController,
   GymHelpOrderController,
   HelpOrderController,
+  UserController,
 };
