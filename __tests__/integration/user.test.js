@@ -1,6 +1,7 @@
 import request from 'supertest';
 import app from '../../src/app';
 import truncate from '../util/truncate';
+import { User } from '../../src/app/models';
 
 describe('User', () => {
   const userOneData = {
@@ -39,5 +40,13 @@ describe('User', () => {
       .send(userOneData);
 
     expect(response.body).toHaveProperty('error', 'User already exists');
+  });
+
+  it('Should have its password encrypted when created', async () => {
+    const user = await User.create(userOneData);
+
+    const encrypted = await user.checkPassword(userOneData.password);
+
+    expect(encrypted).toBe(true);
   });
 });
