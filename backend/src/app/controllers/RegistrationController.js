@@ -20,6 +20,7 @@ class RegistrationController {
         'price',
         'textualPrice',
         'disabled_at',
+        'active',
       ],
       include: [
         {

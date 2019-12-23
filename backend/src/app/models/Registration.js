@@ -1,4 +1,5 @@
 import Sequelize, { Model } from 'sequelize';
+import { isBefore, isAfter } from 'date-fns';
 import { convertCentsToMoney } from '../helpers/PlanHelpers';
 
 class Registration extends Model {
@@ -13,6 +14,15 @@ class Registration extends Model {
           type: Sequelize.VIRTUAL,
           get() {
             return convertCentsToMoney(this.price);
+          },
+        },
+        active: {
+          type: Sequelize.VIRTUAL,
+          get() {
+            return (
+              isBefore(new Date(), this.end_date) &&
+              isAfter(new Date(), this.start_date)
+            );
           },
         },
       },
