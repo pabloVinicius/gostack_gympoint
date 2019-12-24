@@ -2,20 +2,33 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
 
+import { AuthLayout, DefaultLayout } from '../pages';
+
 const RouteWrapper = props => {
   const { component: Component, isPrivate, ...rest } = props;
 
-  const signed = false;
+  const signed = true;
 
   if (!signed && isPrivate) {
     return <Redirect to="/" />;
   }
 
   if (signed && !isPrivate) {
-    return <Redirect to="/dashboard" />;
+    return <Redirect to="/students" />;
   }
 
-  return <Route {...rest} component={Component} />;
+  const Layout = signed ? DefaultLayout : AuthLayout;
+
+  return (
+    <Route
+      {...rest}
+      render={layoutProps => (
+        <Layout>
+          <Component {...layoutProps} />
+        </Layout>
+      )}
+    />
+  );
 };
 
 RouteWrapper.defaultProps = {
