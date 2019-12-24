@@ -4,7 +4,7 @@ import { haveAtLeastOneParameter } from '../helpers/CommonHelpers';
 
 class PlanController {
   async index(req, res) {
-    const { perPage = 5, page = 0 } = req.params;
+    const { perPage = 5, page = 0 } = req.query;
 
     const { rows: plans, count } = await Plan.findAndCountAll({
       where: { disabled_at: null },

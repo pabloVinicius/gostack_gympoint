@@ -1,13 +1,17 @@
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 import { Student } from '../models';
 
 class StudentController {
   async index(req, res) {
-    const { perPage = 5, page = 0 } = req.params;
+    const { perPage = 5, page = 0, q = null } = req.query;
+
+    const whereParam = q ? { where: { name: { [Op.iLike]: `%${q}%` } } } : {};
 
     const { rows: students, count } = await Student.findAndCountAll({
       offset: page * perPage, // witch page we are looking for
       limit: perPage, // number of entries for page
+      ...whereParam,
     });
 
     if (students.length === 0) {
