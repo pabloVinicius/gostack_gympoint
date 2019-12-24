@@ -26,9 +26,7 @@ export default createGlobalStyle`
     cursor: pointer;
   }
 
-  body, input, button {
-    font: 14px 'Roboto', sans-serif;
-  }
+
 
   a {
     text-decoration: none;
@@ -40,5 +38,35 @@ export default createGlobalStyle`
 
   button {
     cursor: pointer;
+  }
+
+  html, body, input, button {
+    font: 16px 'Roboto', sans-serif;
+  }
+
+  /* font resizing */
+
+  @media(max-width: 1366px) {
+    html, body, input, button {
+      font: 14px 'Roboto', sans-serif;
+    }
+  }
+
+  @media(max-width: 1242px) {
+    html, body, input, button {
+      font: 12px 'Roboto', sans-serif;
+    }
+  }
+
+  @media(max-width: 908px) {
+    html, body, input, button {
+      font: 10px 'Roboto', sans-serif;
+    }
+  }
+
+  @media(max-width: 710px) {
+    html, body, input, button {
+      font: 13px 'Roboto', sans-serif;
+    }
   }
 `;
