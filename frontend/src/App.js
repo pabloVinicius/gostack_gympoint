@@ -1,14 +1,17 @@
 import React from 'react';
+import { Router } from 'react-router-dom';
+
+import './config/ReactotronConfig';
 import GlobalStyles from './styles/global';
+import Routes from './routes';
+import history from './services/history';
 
 const App = () => {
   return (
-    <>
+    <Router history={history}>
+      <Routes />
       <GlobalStyles />
-      <div className="App">
-        <h1>Initial Config</h1>
-      </div>
-    </>
+    </Router>
   );
 };
 
