@@ -7,7 +7,7 @@ import { AuthLayout, DefaultLayout } from '~/pages';
 const RouteWrapper = props => {
   const { component: Component, isPrivate, ...rest } = props;
 
-  const signed = false;
+  const signed = true;
 
   if (!signed && isPrivate) {
     return <Redirect to="/" />;
