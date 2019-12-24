@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
 
-import { AuthLayout, DefaultLayout } from '../pages';
+import { AuthLayout, DefaultLayout } from '~/pages';
 
 const RouteWrapper = props => {
   const { component: Component, isPrivate, ...rest } = props;
