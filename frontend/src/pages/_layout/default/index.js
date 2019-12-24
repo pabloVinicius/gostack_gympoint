@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Header } from '~/components';
-import { Wrapper } from './styles';
+import { Wrapper, Content } from './styles';
 
 const DefaultLayout = ({ children }) => {
   return (
     <Wrapper>
       <Header />
-      {children}
+      <Content>{children}</Content>
     </Wrapper>
   );
 };

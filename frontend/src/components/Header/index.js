@@ -1,6 +1,6 @@
 /* eslint-disable react/no-array-index-key */
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useMemo } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { Container, LogoContainer, HeaderLink } from './styles';
 
 import logo from '~/assets/images/logo.svg';
@@ -25,6 +25,11 @@ const links = [
 ];
 
 const Header = () => {
+  const history = useHistory();
+  const path = useMemo(() => new RegExp(history.location.pathname), [
+    history.location,
+  ]);
+
   return (
     <Container>
       <div>
@@ -34,7 +39,7 @@ const Header = () => {
         </LogoContainer>
         <nav>
           {links.map((el, id) => (
-            <HeaderLink key={id} to={el.to} selected={id === 0}>
+            <HeaderLink key={id} to={el.to} selected={path.test(el.to)}>
               {el.name}
             </HeaderLink>
           ))}
