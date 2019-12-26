@@ -1,7 +1,9 @@
 import React from 'react';
 
+import { Table } from '~/components';
+
 const Students = () => {
-  return <div>Students</div>;
+  return <Table />;
 };
 
 export default Students;
