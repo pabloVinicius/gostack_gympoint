@@ -3,16 +3,22 @@ import styled from 'styled-components';
 export const Container = styled.table`
   background-color: #fff;
   border-radius: 0.25rem;
-  width: 75rem;
+  width: 56.25rem;
   padding: 1.875rem;
+  table-layout: fixed;
 
   & th {
     color: #444;
     font-weight: bold;
     font-size: 1rem;
+    text-align: center;
     line-height: 1.1875rem;
-    text-align: start;
     margin-bottom: 1.25rem;
+
+    &:first-child {
+      text-align: start;
+      width: 23.0625em;
+    }
   }
 `;
 
@@ -23,6 +29,10 @@ export const BodyRow = styled.tr`
 
   & td {
     padding-top: 1rem;
+
+    &:not(:first-child) {
+      text-align: center;
+    }
 
     &:last-child {
       text-align: end;

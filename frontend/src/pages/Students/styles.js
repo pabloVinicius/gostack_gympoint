@@ -10,9 +10,13 @@ export const Container = styled.table`
     color: #444;
     font-weight: bold;
     font-size: 1rem;
-    line-height: 1.1875rem;
     text-align: start;
+    line-height: 1.1875rem;
     margin-bottom: 1.25rem;
+
+    &:nth-child(3) {
+      text-align: center;
+    }
   }
 `;
 
@@ -26,6 +30,10 @@ export const BodyRow = styled.tr`
 
     &:last-child {
       text-align: end;
+    }
+
+    &:nth-child(3) {
+      text-align: center;
     }
   }
 

@@ -6,37 +6,39 @@ import { Container, BodyRow, Wrapper } from './styles';
 const data = Array(10)
   .fill(0)
   .map((_, id) => ({
-    title: 'Diamond',
-    duration: id + 1,
-    value: 'R$ 130,00',
+    student: 'João José',
+    plan: 'Standard',
+    begin: '25 de setembro de 2005',
+    end: '26 de setembro de 2005',
+    active: id % 2 === 0,
     id: `${id}`,
   }));
 const numberOfPages = 10;
 const currentPage = 1;
 const onPageChange = () => {};
 
-const Plans = () => {
+const Registrations = () => {
   return (
     <Wrapper>
       <Container>
         <thead>
           <tr>
-            <th>TÍTULO</th>
-            <th>DURAÇÃO</th>
-            <th>VALOR p/ MÊS</th>
+            <th>ALUNO</th>
+            <th>PLANO</th>
+            <th>INÍCIO</th>
+            <th>TÉRMINO</th>
+            <th>ATIVA</th>
             <th />
           </tr>
         </thead>
         <tbody>
           {data.map(row => (
             <BodyRow key={row.id}>
-              <td>{row.title}</td>
-              <td>
-                {row?.duration > 1
-                  ? `${row?.duration} meses`
-                  : `${row?.duration} mês`}
-              </td>
-              <td>{row.value}</td>
+              <td>{row.student}</td>
+              <td>{row.plan}</td>
+              <td>{row.begin}</td>
+              <td>{row.end}</td>
+              <td>{row.active ? 'Sim' : 'Não'}</td>
               <td>
                 <Link to={`/plans/${row.id}`}>editar</Link>
                 <span onClick={() => {}}>apagar</span>
@@ -54,4 +56,4 @@ const Plans = () => {
   );
 };
 
-export default Plans;
+export default Registrations;

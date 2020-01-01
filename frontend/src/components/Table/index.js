@@ -48,7 +48,7 @@ const Table = ({
 };
 
 Table.defaultProps = {
-  rows: ['Nome', 'E-mail', 'Idade'],
+  rows: ['NOME', 'E-MAIL', 'IDADE'],
   data: Array(10)
     .fill(0)
     .map((_, id) => ({
