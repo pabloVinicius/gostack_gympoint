@@ -21,9 +21,11 @@ const Students = () => {
       <Header>
         <h1>Gerenciando alunos</h1>
         <div>
-          <TableButton icon="plus" colorType="primary">
-            Cadastrar
-          </TableButton>
+          <Link to="/students/new">
+            <TableButton icon="plus" colorType="primary">
+              Cadastrar
+            </TableButton>
+          </Link>
           <SearchBar onChange={() => {}} value="" placeholder="Buscar aluno" />
         </div>
       </Header>

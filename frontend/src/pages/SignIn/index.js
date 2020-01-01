@@ -26,7 +26,7 @@ const SignIn = () => {
 
       <Form schema={schema} onSubmit={() => {}}>
         <TextInput
-          label="Seu email"
+          label="Seu e-mail"
           type="email"
           placeholder="exemplo@email.com"
           name="email"

@@ -31,8 +31,8 @@ TableButton.defaultProps = {
 
 TableButton.propTypes = {
   colorType: PropTypes.string,
-  icon: PropTypes.string,
-  children: PropTypes.element.isRequired,
+  icon: PropTypes.oneOf(['plus', 'check', 'back']),
+  children: PropTypes.string.isRequired,
 };
 
 export default TableButton;
