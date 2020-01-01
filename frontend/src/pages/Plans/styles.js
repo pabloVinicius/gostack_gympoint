@@ -3,9 +3,9 @@ import styled from 'styled-components';
 export const Container = styled.table`
   background-color: #fff;
   border-radius: 0.25rem;
-  width: 56.25rem;
   padding: 1.875rem;
   table-layout: fixed;
+  width: 100%;
 
   & th {
     color: #444;
@@ -67,8 +67,23 @@ export const Wrapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  width: 56.25rem;
 
   & table {
     margin-bottom: 1.25rem;
+  }
+`;
+
+export const Header = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    color: #444444;
+    font-size: 1.5rem;
+    line-height: 1.75rem;
   }
 `;

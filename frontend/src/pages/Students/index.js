@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Pagination } from '~/components';
-import { Container, BodyRow, Wrapper } from './styles';
+import { Pagination, TableButton } from '~/components';
+import { Container, BodyRow, Wrapper, Header } from './styles';
 
 const data = Array(10)
   .fill(0)
@@ -18,6 +18,12 @@ const onPageChange = () => {};
 const Students = () => {
   return (
     <Wrapper>
+      <Header>
+        <h1>Gerenciando alunos</h1>
+        <TableButton icon="plus" colorType="primary">
+          Cadastrar
+        </TableButton>
+      </Header>
       <Container>
         <thead>
           <tr>

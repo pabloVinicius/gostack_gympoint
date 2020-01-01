@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
+  min-height: fit-content;
   height: 100%;
   width: 100%;
   display: flex;
