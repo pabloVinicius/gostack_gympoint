@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Pagination, TableButton } from '~/components';
+import { Pagination, TableButton, SearchBar } from '~/components';
 import { Container, BodyRow, Wrapper, Header } from './styles';
 
 const data = Array(10)
@@ -20,9 +20,12 @@ const Students = () => {
     <Wrapper>
       <Header>
         <h1>Gerenciando alunos</h1>
-        <TableButton icon="plus" colorType="primary">
-          Cadastrar
-        </TableButton>
+        <div>
+          <TableButton icon="plus" colorType="primary">
+            Cadastrar
+          </TableButton>
+          <SearchBar onChange={() => {}} value="" placeholder="Buscar aluno" />
+        </div>
       </Header>
       <Container>
         <thead>

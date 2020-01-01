@@ -84,4 +84,12 @@ export const Header = styled.div`
     font-size: 1.5rem;
     line-height: 1.75rem;
   }
+
+  & > div {
+    display: flex;
+
+    & > button {
+      margin-right: 1rem;
+    }
+  }
 `;
