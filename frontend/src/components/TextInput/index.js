@@ -1,29 +1,15 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { useField } from '@rocketseat/unform';
 
 import { Container } from './styles';
 
 const TextInput = props => {
-  const { name, label, ...rest } = props;
-  const ref = useRef(null);
-  const { fieldName, registerField, error } = useField(name);
-
-  useEffect(() => {
-    registerField({
-      name: fieldName,
-      ref: ref.current,
-      parseValue: inputRef => {
-        return inputRef.value;
-      },
-      path: 'state.value',
-    });
-  }, [ref.current, fieldName]); // eslint-disable-line
+  const { name, label, error, ...rest } = props;
 
   return (
-    <Container>
-      {label && <label htmlFor={fieldName}>{label}</label>}
-      <input ref={ref} {...rest} />
+    <Container readOnly={rest.readOnly}>
+      {label && <label htmlFor={name}>{label}</label>}
+      <input name={name} {...rest} />
       {error && <span>{error}</span>}
     </Container>
   );
@@ -31,10 +17,12 @@ const TextInput = props => {
 
 TextInput.defaultProps = {
   label: '',
+  error: undefined,
 };
 
 TextInput.propTypes = {
   label: PropTypes.string,
+  error: PropTypes.string,
   name: PropTypes.string.isRequired,
 };
 

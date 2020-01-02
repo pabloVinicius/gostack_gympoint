@@ -20,9 +20,11 @@ const Plans = () => {
     <Wrapper>
       <Header>
         <h1>Gerenciando planos</h1>
-        <TableButton icon="plus" colorType="primary">
-          Cadastrar
-        </TableButton>
+        <Link to="/plans/new">
+          <TableButton icon="plus" colorType="primary">
+            Cadastrar
+          </TableButton>
+        </Link>
       </Header>
       <Container>
         <thead>

@@ -8,20 +8,12 @@ import { TableButton, TextInput } from '~/components';
 import { Wrapper, Header, Container, FormContent } from './styles';
 
 const schema = yup.object().shape({
-  name: yup.string().required('O nome é obrigatório'),
-  email: yup
-    .string()
-    .email('Informe um e-mail válido')
-    .required('O e-email é obrigatório'),
-  age: yup
-    .number()
-    .min(1)
-    .required('Informe a idade'),
-  weight: yup.number().required('Informe o peso.'),
-  height: yup.number().required('Informe a altura'),
+  title: yup.string().required('O título é obrigatório'),
+  duration: yup.number().required('Informe a quantidade de meses'),
+  price: yup.string().required('Informe o preço mensal'),
 });
 
-const StudentForm = ({ match }) => {
+const PlanForm = ({ match }) => {
   const id = decodeURIComponent(match.params.id);
   const isNew = id === 'new';
 
@@ -34,9 +26,9 @@ const StudentForm = ({ match }) => {
         }}
       >
         <Header>
-          <h1>{isNew ? 'Cadastro de aluno' : 'Edição de aluno'}</h1>
+          <h1>{isNew ? 'Cadastro de plano' : 'Edição de plano'}</h1>
           <div>
-            <Link to="/students">
+            <Link to="/plans">
               <TableButton colorType="secondary" type="button" icon="back">
                 Voltar
               </TableButton>
@@ -48,22 +40,21 @@ const StudentForm = ({ match }) => {
         </Header>
         <Container>
           <FormContent>
-            <TextInput
-              label="Nome completo"
-              placeholder="John Doe"
-              type="text"
-              name="name"
-            />
-            <TextInput
-              label="Endereço de e-mail"
-              type="email"
-              placeholder="exemplo@email.com"
-              name="email"
-            />
+            <TextInput label="Título do plano" type="text" name="title" />
             <div>
-              <TextInput label="Idade" name="age" />
-              <TextInput label="Peso (em kg)" name="weight" />
-              <TextInput label="Altura" name="height" />
+              <TextInput
+                label="Duração (em meses)"
+                name="duration"
+                type="number"
+                min="1"
+              />
+              <TextInput type="number" label="Preço mensal" name="price" />
+              <TextInput
+                label="Preço total"
+                name="totalPrice"
+                value="abc"
+                readOnly
+              />
             </div>
           </FormContent>
         </Container>
@@ -72,7 +63,7 @@ const StudentForm = ({ match }) => {
   );
 };
 
-StudentForm.propTypes = {
+PlanForm.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string,
@@ -80,4 +71,4 @@ StudentForm.propTypes = {
   }).isRequired,
 };
 
-export default StudentForm;
+export default PlanForm;

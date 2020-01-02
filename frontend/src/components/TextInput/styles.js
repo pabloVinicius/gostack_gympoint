@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  flex: 1;
 
   & label {
     font-weight: bold;
@@ -17,7 +17,7 @@ export const Container = styled.div`
   & input {
     border: 0.0625rem solid #ddd;
     border-radius: 0.25rem;
-    background: #fff;
+    background: ${props => (props.readOnly ? '#F5F5F5' : '#fff')};
     font-size: 1rem;
     line-height: 1.1875rem;
     padding: 0.8125rem 0.9375rem;

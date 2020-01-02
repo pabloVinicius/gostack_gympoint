@@ -22,9 +22,11 @@ const Registrations = () => {
     <Wrapper>
       <Header>
         <h1>Gerenciando matrículas</h1>
-        <TableButton icon="plus" colorType="primary">
-          Cadastrar
-        </TableButton>
+        <Link to="/registrations/new">
+          <TableButton icon="plus" colorType="primary">
+            Cadastrar
+          </TableButton>
+        </Link>
       </Header>
       <Container>
         <thead>
@@ -46,7 +48,7 @@ const Registrations = () => {
               <td>{row.end}</td>
               <td>{row.active ? 'Sim' : 'Não'}</td>
               <td>
-                <Link to={`/plans/${row.id}`}>editar</Link>
+                <Link to={`/registrations/${row.id}`}>editar</Link>
                 <span onClick={() => {}}>apagar</span>
               </td>
             </BodyRow>
