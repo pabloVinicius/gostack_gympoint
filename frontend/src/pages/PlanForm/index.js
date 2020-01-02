@@ -1,8 +1,8 @@
 import React from 'react';
 import * as yup from 'yup';
+import { useFormik } from 'formik';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Form } from '@rocketseat/unform';
 import { TableButton, TextInput } from '~/components';
 
 import { Wrapper, Header, Container, FormContent } from './styles';
@@ -17,14 +17,19 @@ const PlanForm = ({ match }) => {
   const id = decodeURIComponent(match.params.id);
   const isNew = id === 'new';
 
+  const formik = useFormik({
+    initialValues: {
+      title: '',
+      duration: '',
+      price: '',
+    },
+    validationSchema: schema,
+    onSubmit: values => console.log('values', values),
+  });
+
   return (
     <Wrapper>
-      <Form
-        schema={schema}
-        onSubmit={e => {
-          console.log(e);
-        }}
-      >
+      <form onSubmit={formik.handleSubmit}>
         <Header>
           <h1>{isNew ? 'Cadastro de plano' : 'Edição de plano'}</h1>
           <div>
@@ -40,15 +45,29 @@ const PlanForm = ({ match }) => {
         </Header>
         <Container>
           <FormContent>
-            <TextInput label="Título do plano" type="text" name="title" />
+            <TextInput
+              label="Título do plano"
+              type="text"
+              name="title"
+              error={formik.errors.title}
+              {...formik.getFieldProps('title')}
+            />
             <div>
               <TextInput
                 label="Duração (em meses)"
                 name="duration"
                 type="number"
                 min="1"
+                error={formik.errors.duration}
+                {...formik.getFieldProps('duration')}
               />
-              <TextInput type="number" label="Preço mensal" name="price" />
+              <TextInput
+                type="number"
+                label="Preço mensal"
+                name="price"
+                error={formik.errors.price}
+                {...formik.getFieldProps('price')}
+              />
               <TextInput
                 label="Preço total"
                 name="totalPrice"
@@ -58,7 +77,7 @@ const PlanForm = ({ match }) => {
             </div>
           </FormContent>
         </Container>
-      </Form>
+      </form>
     </Wrapper>
   );
 };

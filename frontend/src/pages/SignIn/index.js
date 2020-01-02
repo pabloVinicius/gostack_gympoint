@@ -1,5 +1,6 @@
 import React from 'react';
 import * as yup from 'yup';
+import { useFormik } from 'formik';
 import { Container, LogoContainer, Form } from './styles';
 import logo from '~/assets/images/logo.svg';
 
@@ -17,6 +18,15 @@ const schema = yup.object().shape({
 });
 
 const SignIn = () => {
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: schema,
+    onSubmit: values => console.log('values', values),
+  });
+
   return (
     <Container>
       <LogoContainer>
@@ -24,18 +34,22 @@ const SignIn = () => {
         <h1>GYMPOINT</h1>
       </LogoContainer>
 
-      <Form schema={schema} onSubmit={() => {}}>
+      <Form onSubmit={formik.handleSubmit}>
         <TextInput
           label="Seu e-mail"
           type="email"
           placeholder="exemplo@email.com"
           name="email"
+          error={formik.errors.email}
+          {...formik.getFieldProps('email')}
         />
         <TextInput
           name="password"
           label="Sua senha"
           type="password"
           placeholder="*********"
+          error={formik.errors.password}
+          {...formik.getFieldProps('password')}
         />
         <MainButton type="submit">Entrar no sistema</MainButton>
       </Form>

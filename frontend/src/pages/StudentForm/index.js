@@ -1,8 +1,8 @@
 import React from 'react';
 import * as yup from 'yup';
+import { useFormik } from 'formik';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Form } from '@rocketseat/unform';
 import { TableButton, TextInput } from '~/components';
 
 import { Wrapper, Header, Container, FormContent } from './styles';
@@ -25,14 +25,21 @@ const StudentForm = ({ match }) => {
   const id = decodeURIComponent(match.params.id);
   const isNew = id === 'new';
 
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      email: '',
+      age: '',
+      weight: '',
+      height: '',
+    },
+    validationSchema: schema,
+    onSubmit: values => console.log('values', values),
+  });
+
   return (
     <Wrapper>
-      <Form
-        schema={schema}
-        onSubmit={e => {
-          console.log(e);
-        }}
-      >
+      <form onSubmit={formik.handleSubmit}>
         <Header>
           <h1>{isNew ? 'Cadastro de aluno' : 'Edição de aluno'}</h1>
           <div>
@@ -53,21 +60,40 @@ const StudentForm = ({ match }) => {
               placeholder="John Doe"
               type="text"
               name="name"
+              error={formik.errors.name}
+              {...formik.getFieldProps('name')}
             />
             <TextInput
               label="Endereço de e-mail"
               type="email"
               placeholder="exemplo@email.com"
               name="email"
+              error={formik.errors.email}
+              {...formik.getFieldProps('email')}
             />
             <div>
-              <TextInput label="Idade" name="age" />
-              <TextInput label="Peso (em kg)" name="weight" />
-              <TextInput label="Altura" name="height" />
+              <TextInput
+                label="Idade"
+                name="age"
+                error={formik.errors.age}
+                {...formik.getFieldProps('age')}
+              />
+              <TextInput
+                label="Peso (em kg)"
+                name="weight"
+                error={formik.errors.weight}
+                {...formik.getFieldProps('weight')}
+              />
+              <TextInput
+                label="Altura"
+                name="height"
+                error={formik.errors.height}
+                {...formik.getFieldProps('height')}
+              />
             </div>
           </FormContent>
         </Container>
-      </Form>
+      </form>
     </Wrapper>
   );
 };

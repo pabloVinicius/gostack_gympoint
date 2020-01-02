@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Form as UnformForm } from '@rocketseat/unform';
 
 export const Container = styled.div`
   display: flex;
@@ -33,7 +32,7 @@ export const LogoContainer = styled.div`
   }
 `;
 
-export const Form = styled(UnformForm)`
+export const Form = styled.form`
   & > div {
     :not(:last-child) {
       margin-bottom: 1.25rem;
