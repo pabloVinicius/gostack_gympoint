@@ -1,6 +1,6 @@
 import React from 'react';
 import * as yup from 'yup';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { Form } from '@rocketseat/unform';
 import { TableButton, TextInput } from '~/components';
 
@@ -37,10 +37,14 @@ const StudentForm = () => {
         <Header>
           <h1>{isNew ? 'Cadastro de aluno' : 'Edição de aluno'}</h1>
           <div>
-            <TableButton colorType="secondary" type="submit" icon="back">
-              Voltar
+            <Link to="/students">
+              <TableButton colorType="secondary" type="button" icon="back">
+                Voltar
+              </TableButton>
+            </Link>
+            <TableButton type="submit" icon="check">
+              Salvar
             </TableButton>
-            <TableButton icon="check">Salvar</TableButton>
           </div>
         </Header>
         <Container>
@@ -58,29 +62,9 @@ const StudentForm = () => {
               name="email"
             />
             <div>
-              <TextInput
-                label="Idade"
-                name="age"
-                mask={Number}
-                scale={0}
-                min={0}
-              />
-              <TextInput
-                label="Peso (em kg)"
-                name="weight"
-                mask={Number}
-                scale={2}
-                min={0}
-                padFractionalZeros
-              />
-              <TextInput
-                label="Altura"
-                name="height"
-                mask={Number}
-                scale={2}
-                min={0}
-                padFractionalZeros
-              />
+              <TextInput label="Idade" name="age" />
+              <TextInput label="Peso (em kg)" name="weight" />
+              <TextInput label="Altura" name="height" />
             </div>
           </FormContent>
         </Container>

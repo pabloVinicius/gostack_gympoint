@@ -88,7 +88,7 @@ export const Header = styled.div`
   & > div {
     display: flex;
 
-    & > button {
+    & button {
       margin-right: 1rem;
     }
   }

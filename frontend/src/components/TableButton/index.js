@@ -6,7 +6,7 @@ import { FiPlus } from 'react-icons/fi';
 import { Container } from './styles';
 
 const TableButton = props => {
-  const { children, colorType, icon } = props;
+  const { children, colorType, icon, ...rest } = props;
 
   const icons = {
     plus: FiPlus,
@@ -17,7 +17,7 @@ const TableButton = props => {
   const MyIcon = icons[icon];
 
   return (
-    <Container colorType={colorType}>
+    <Container {...rest} colorType={colorType}>
       <MyIcon color="#fff" size={20} />
       {children}
     </Container>

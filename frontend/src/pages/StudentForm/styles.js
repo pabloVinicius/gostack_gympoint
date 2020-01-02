@@ -21,7 +21,7 @@ export const Header = styled.div`
 
   & > div {
     display: flex;
-    & > button:first-of-type {
+    & button:first-of-type {
       margin-right: 1rem;
     }
   }
