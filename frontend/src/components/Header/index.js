@@ -1,9 +1,11 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Container, LogoContainer, HeaderLink } from './styles';
 
 import logo from '~/assets/images/logo.svg';
+import { signOut } from '~/store/modules/auth/actions';
 
 const links = [
   {
@@ -26,9 +28,16 @@ const links = [
 
 const Header = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const path = useMemo(() => new RegExp(history.location.pathname), [
     history.location,
   ]);
+
+  const userName = useSelector(state => state.user.user.name);
+
+  const handleSignOut = () => {
+    dispatch(signOut());
+  };
 
   return (
     <Container>
@@ -46,8 +55,8 @@ const Header = () => {
         </nav>
       </div>
       <aside>
-        <strong>Nome do usuário</strong>
-        <span>sair do sistema</span>
+        <strong>{userName}</strong>
+        <span onClick={handleSignOut}>sair do sistema</span>
       </aside>
     </Container>
   );
