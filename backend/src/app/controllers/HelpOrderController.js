@@ -1,6 +1,5 @@
 import * as Yup from 'yup';
 import { HelpOrder, Student } from '../models';
-import { haveAtLeastOneParameter } from '../helpers/CommonHelpers';
 
 class HelpOrderController {
   async index(req, res) {
@@ -48,18 +47,6 @@ class HelpOrderController {
     const user = await Student.findByPk(id);
     if (!user) {
       return res.status(404).json({ error: 'Student not found.' });
-    }
-
-    /*
-      Check if user has sent at least one parameter
-    */
-    const parameters = ['answer'];
-    if (!haveAtLeastOneParameter(parameters, req.body)) {
-      return res.status(400).json({
-        error: `You have to send at least one of the following parameters: ${parameters.join(
-          ', '
-        )}`,
-      });
     }
 
     const schema = Yup.object().shape({
