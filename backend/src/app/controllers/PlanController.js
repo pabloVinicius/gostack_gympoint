@@ -7,7 +7,14 @@ class PlanController {
     const { perPage = 5, page = 0 } = req.query;
 
     const { rows: plans, count } = await Plan.findAndCountAll({
-      attributes: ['title', 'duration', 'totalPrice', 'textualPrice', 'id'],
+      attributes: [
+        'price',
+        'title',
+        'duration',
+        'totalPrice',
+        'textualPrice',
+        'id',
+      ],
       where: { disabled_at: null },
       offset: page * perPage, // witch page we are looking for
       limit: perPage, // number of entries for page

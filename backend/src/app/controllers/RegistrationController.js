@@ -44,6 +44,33 @@ class RegistrationController {
     return res.json({ registrations, pages, count });
   }
 
+  async read(req, res) {
+    const { id } = req.params;
+
+    const registration = await Registration.findByPk(id, {
+      include: [
+        {
+          model: Student,
+          as: 'student',
+          attributes: ['id', 'name'],
+        },
+        {
+          model: Plan,
+          as: 'plan',
+          attributes: ['id', 'title', 'totalPrice', 'duration', 'price'],
+        },
+      ],
+    });
+
+    if (!registration) {
+      return res.status(404).json({ error: 'Registration not found' });
+    }
+
+    const { start_date, end_date, student, plan } = registration;
+
+    return res.json({ registration: { start_date, end_date, student, plan } });
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       student_id: Yup.number()
@@ -86,7 +113,7 @@ class RegistrationController {
     const price = duration * planPrice;
     const registration = await Registration.create({
       ...req.body,
-      end_date: addMonths(parseISO(start_date), 3),
+      end_date: addMonths(parseISO(start_date), duration),
       price,
     });
 
@@ -183,7 +210,7 @@ class RegistrationController {
     const price = duration * planPrice;
     await registration.update({
       ...req.body,
-      end_date: addMonths(parseISO(start_date), 3),
+      end_date: addMonths(parseISO(start_date), duration),
       price,
     });
 

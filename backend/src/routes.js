@@ -42,6 +42,7 @@ routes.delete('/plans/:id', PlanController.delete);
 routes.get('/registrations', RegistrationController.index);
 routes.post('/registrations', RegistrationController.store);
 routes.put('/registrations/:id', RegistrationController.update);
+routes.get('/registrations/:id', RegistrationController.read);
 routes.delete('/registrations/:id', RegistrationController.delete);
 
 routes.get('/help-orders', GymHelpOrderController.index);
