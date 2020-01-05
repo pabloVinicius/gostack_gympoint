@@ -9,6 +9,7 @@ class StudentController {
     const whereParam = q ? { where: { name: { [Op.iLike]: `%${q}%` } } } : {};
 
     const { rows: students, count } = await Student.findAndCountAll({
+      attributes: ['name', 'email', 'age', 'id'],
       offset: page * perPage, // witch page we are looking for
       limit: perPage, // number of entries for page
       ...whereParam,
