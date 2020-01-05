@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { Pagination, TableButton, Spinner } from '~/components';
 import { Container, BodyRow, Wrapper, Header } from './styles';
@@ -35,10 +36,16 @@ const Plans = () => {
     getPlans();
   }, [page]);
 
-  const handleDelete = id => {
+  const handleDelete = async id => {
     const confirmed = window.confirm('Tem certeza que deseja deletar?');
     if (confirmed) {
-      alert(`Delete: ${id}`);
+      try {
+        await api.delete(`plans/${id}`);
+        toast.success('Plano deletado com sucesso!');
+        getPlans();
+      } catch (err) {
+        toast.error('Erro ao deletar plano');
+      }
     }
   };
 
