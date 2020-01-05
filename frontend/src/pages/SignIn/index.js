@@ -1,10 +1,12 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { Container, LogoContainer, Form } from './styles';
 import logo from '~/assets/images/logo.svg';
 
 import { TextInput, MainButton } from '~/components';
+import { signInRequest } from '~/store/modules/auth/actions';
 
 const schema = yup.object().shape({
   email: yup
@@ -18,13 +20,19 @@ const schema = yup.object().shape({
 });
 
 const SignIn = () => {
+  const dispatch = useDispatch();
+
+  const handleSubmit = ({ email, password }) => {
+    dispatch(signInRequest(email, password));
+  };
+
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
     validationSchema: schema,
-    onSubmit: values => console.log('values', values),
+    onSubmit: handleSubmit,
   });
 
   return (
