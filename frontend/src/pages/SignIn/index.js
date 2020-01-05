@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { Container, LogoContainer, Form } from './styles';
@@ -21,6 +21,7 @@ const schema = yup.object().shape({
 
 const SignIn = () => {
   const dispatch = useDispatch();
+  const loading = useSelector(state => state.auth.loading);
 
   const handleSubmit = ({ email, password }) => {
     dispatch(signInRequest(email, password));
@@ -55,11 +56,13 @@ const SignIn = () => {
           name="password"
           label="Sua senha"
           type="password"
-          placeholder="*********"
+          placeholder="******"
           error={formik.errors.password}
           {...formik.getFieldProps('password')}
         />
-        <MainButton type="submit">Entrar no sistema</MainButton>
+        <MainButton type="submit">
+          {loading ? 'Carregando...' : 'Entrar no sistema'}
+        </MainButton>
       </Form>
     </Container>
   );
