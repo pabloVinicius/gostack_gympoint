@@ -3,3 +3,14 @@ export const formatDecimal = value => {
   value = value.replace(/(\d{1})(\d{2}$)/, '$1,$2');
   return value;
 };
+
+export const formatNumberToString = value => {
+  return parseFloat(value).toLocaleString('pt-br', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+};
+
+export const formatStringToNumber = value => {
+  return parseFloat(value.replace(',', '.'));
+};

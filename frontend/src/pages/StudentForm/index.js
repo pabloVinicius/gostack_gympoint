@@ -1,11 +1,21 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
+import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { TableButton, TextInput } from '~/components';
+import { TableButton, TextInput, Spinner } from '~/components';
+import {
+  formatDecimal,
+  formatNumberToString,
+  formatStringToNumber,
+} from '~/util/format';
 
 import { Wrapper, Header, Container, FormContent } from './styles';
+
+import api from '~/services/api';
+import history from '~/services/history';
 
 const schema = yup.object().shape({
   name: yup.string().required('O nome é obrigatório'),
@@ -16,14 +26,42 @@ const schema = yup.object().shape({
   age: yup
     .number()
     .min(1)
+    .max(150, 'Apenas humanos de até 150 anos')
     .required('Informe a idade'),
-  weight: yup.number().required('Informe o peso.'),
-  height: yup.number().required('Informe a altura'),
+  weight: yup.string().required('Informe o peso.'),
+  height: yup.string().required('Informe a altura'),
 });
 
 const StudentForm = ({ match }) => {
   const id = decodeURIComponent(match.params.id);
   const isNew = id === 'new';
+  const [notFound, setNotFound] = useState(false);
+  const [loading, setLoading] = useState(!isNew);
+
+  const handleSubmit = async values => {
+    setLoading(true);
+    const method = isNew ? api.post : api.put;
+    const url = isNew ? 'students' : `students/${id}`;
+
+    const formated = {
+      ...values,
+      height: formatStringToNumber(values.height),
+      weight: formatStringToNumber(values.weight),
+    };
+    try {
+      await method(url, formated);
+      toast.success('Salvo com sucesso');
+
+      if (isNew) {
+        history.push('/students');
+      } else {
+        setLoading(false);
+      }
+    } catch (err) {
+      toast.error('Erro ao salvar');
+      setLoading(false);
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -34,8 +72,48 @@ const StudentForm = ({ match }) => {
       height: '',
     },
     validationSchema: schema,
-    onSubmit: values => console.log('values', values),
+    onSubmit: handleSubmit,
   });
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`students/${id}`);
+        const { student } = response.data;
+
+        const { height, weight } = student;
+
+        const formated = {
+          ...student,
+          height: formatNumberToString(height),
+          weight: formatNumberToString(weight),
+        };
+
+        formik.setValues(formated);
+        setLoading(false);
+      } catch (err) {
+        toast.error('Aluno não encontrado');
+        setNotFound(true);
+        setLoading(false);
+      }
+    };
+
+    if (!isNew) {
+      getData();
+    }
+  }, [id, isNew]);
+
+  if (loading) {
+    return <Spinner />;
+  }
+
+  if (notFound) {
+    return (
+      <Wrapper>
+        <h1>Aluno não encontrado</h1>
+      </Wrapper>
+    );
+  }
 
   return (
     <Wrapper>
@@ -75,6 +153,8 @@ const StudentForm = ({ match }) => {
               <TextInput
                 label="Idade"
                 name="age"
+                type="number"
+                min="0"
                 error={formik.errors.age}
                 {...formik.getFieldProps('age')}
               />
@@ -83,12 +163,14 @@ const StudentForm = ({ match }) => {
                 name="weight"
                 error={formik.errors.weight}
                 {...formik.getFieldProps('weight')}
+                value={formatDecimal(formik.values.weight)}
               />
               <TextInput
-                label="Altura"
+                label="Altura (em metros)"
                 name="height"
                 error={formik.errors.height}
                 {...formik.getFieldProps('height')}
+                value={formatDecimal(formik.values.height)}
               />
             </div>
           </FormContent>
