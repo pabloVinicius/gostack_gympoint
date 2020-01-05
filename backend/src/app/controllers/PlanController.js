@@ -7,6 +7,7 @@ class PlanController {
     const { perPage = 5, page = 0 } = req.query;
 
     const { rows: plans, count } = await Plan.findAndCountAll({
+      attributes: ['title', 'duration', 'totalPrice', 'textualPrice', 'id'],
       where: { disabled_at: null },
       offset: page * perPage, // witch page we are looking for
       limit: perPage, // number of entries for page
@@ -18,6 +19,20 @@ class PlanController {
 
     const pages = Math.ceil(count / perPage);
     return res.json({ plans, pages, count });
+  }
+
+  async read(req, res) {
+    const { id } = req.params;
+
+    const plan = await Plan.findByPk(id);
+
+    if (!plan) {
+      return res.status(404).json({ error: 'Plan not found' });
+    }
+
+    const { title, duration, price } = plan;
+
+    return res.json({ plan: { title, duration, price } });
   }
 
   async store(req, res) {
