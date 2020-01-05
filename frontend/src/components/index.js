@@ -7,3 +7,4 @@ export { default as TableButton } from './TableButton';
 export { default as SearchBar } from './SearchBar';
 export { default as HelpOrderModal } from './HelpOrderModal';
 export { default as Spinner } from './Spinner';
+export { default as SelectInput } from './SelectInput';

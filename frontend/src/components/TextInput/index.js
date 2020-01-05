@@ -1,7 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { IMaskMixin } from 'react-imask';
 
 import { Container } from './styles';
+
+const MaskedInput = IMaskMixin(({ inputRef, ...props }) => (
+  <input {...props} ref={inputRef} />
+));
 
 const TextInput = props => {
   const { name, label, error, ...rest } = props;
@@ -9,7 +14,7 @@ const TextInput = props => {
   return (
     <Container readOnly={rest.readOnly}>
       {label && <label htmlFor={name}>{label}</label>}
-      <input name={name} {...rest} />
+      <MaskedInput name={name} {...rest} />
       {error && <span>{error}</span>}
     </Container>
   );
