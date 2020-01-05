@@ -24,9 +24,7 @@ class GymHelpOrderController {
     });
 
     if (helpOrders.length === 0) {
-      return res
-        .status(404)
-        .json({ error: 'No help orders found for this student.' });
+      return res.status(404).json({ error: 'No help orders found.' });
     }
     const pages = Math.ceil(count / perPage);
     return res.json({ helpOrders, pages, count });
