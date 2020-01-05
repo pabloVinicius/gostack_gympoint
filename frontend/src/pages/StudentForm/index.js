@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+/* disabled because it was trying to add formik in dependencies of useEffect, what was making api request run again */
 import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';

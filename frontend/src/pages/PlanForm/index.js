@@ -1,11 +1,21 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* disabled because it was trying to add formik in dependencies of useEffect, what was making api request run again */
+import React, { useState, useEffect, useMemo } from 'react';
 import * as yup from 'yup';
+import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { TableButton, TextInput } from '~/components';
-
+import { TableButton, TextInput, Spinner } from '~/components';
+import {
+  formatDecimal,
+  formatNumberToString,
+  formatStringToNumber,
+} from '~/util/format';
 import { Wrapper, Header, Container, FormContent } from './styles';
+
+import api from '~/services/api';
+import history from '~/services/history';
 
 const schema = yup.object().shape({
   title: yup.string().required('O título é obrigatório'),
@@ -16,16 +26,99 @@ const schema = yup.object().shape({
 const PlanForm = ({ match }) => {
   const id = decodeURIComponent(match.params.id);
   const isNew = id === 'new';
+  const [notFound, setNotFound] = useState(false);
+  const [loading, setLoading] = useState(!isNew);
+
+  const handleSubmit = async values => {
+    setLoading(true);
+    const method = isNew ? api.post : api.put;
+    const url = isNew ? 'plans' : `plans/${id}`;
+
+    const formated = {
+      ...values,
+      price: formatStringToNumber(values.price) * 100, // i'm storing in cents
+    };
+
+    try {
+      await method(url, formated);
+      toast.success('Salvo com sucesso');
+
+      if (isNew) {
+        history.push('/plans');
+      } else {
+        setLoading(false);
+      }
+    } catch (err) {
+      toast.error('Erro ao salvar');
+      setLoading(false);
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
       title: '',
-      duration: '',
+      duration: '1',
       price: '',
     },
     validationSchema: schema,
-    onSubmit: values => console.log('values', values),
+    onSubmit: handleSubmit,
   });
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`plans/${id}`);
+        const { plan } = response.data;
+
+        const { price } = plan;
+
+        const formated = {
+          ...plan,
+          price: formatNumberToString(price / 100),
+        };
+
+        formik.setValues(formated);
+        setLoading(false);
+      } catch (err) {
+        toast.error('Plano não encontrado');
+        setNotFound(true);
+        setLoading(false);
+      }
+    };
+
+    if (!isNew) {
+      getData();
+    }
+  }, [id, isNew]);
+
+  const totalPrice = useMemo(() => {
+    const { duration, price } = formik.values;
+    const formated = formatNumberToString(
+      duration * formatStringToNumber(price)
+    );
+    return formated === 'NaN' ? '-' : formated;
+  }, [formik.values.price, formik.values.duration]);
+
+  const changePrice = e => {
+    formik.handleChange({
+      target: {
+        name: 'price',
+        value: formatDecimal(e.target.value),
+      },
+    });
+  };
+
+  if (loading) {
+    return <Spinner />;
+  }
+
+  if (notFound) {
+    return (
+      <Wrapper>
+        <h1>Plano não encontrado</h1>
+      </Wrapper>
+    );
+  }
 
   return (
     <Wrapper>
@@ -62,16 +155,17 @@ const PlanForm = ({ match }) => {
                 {...formik.getFieldProps('duration')}
               />
               <TextInput
-                type="number"
-                label="Preço mensal"
+                label="Preço mensal (em reais)"
                 name="price"
                 error={formik.errors.price}
-                {...formik.getFieldProps('price')}
+                // {...formik.getFieldProps('price')}
+                onChange={changePrice}
+                value={formik.values.price}
               />
               <TextInput
                 label="Preço total"
                 name="totalPrice"
-                value="abc"
+                value={totalPrice}
                 readOnly
               />
             </div>

@@ -4,6 +4,14 @@ export const Wrapper = styled.div`
   width: 56.25rem;
   display: flex;
   flex-direction: column;
+
+  & > h1 {
+    align-self: center;
+    font-size: 1.5rem;
+    color: #444;
+    line-height: 1.75rem;
+    font-weight: bold;
+  }
 `;
 
 export const Header = styled.div`
