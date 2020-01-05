@@ -15,11 +15,25 @@ class StudentController {
     });
 
     if (students.length === 0) {
-      return res.status(404).json({ error: 'No student found' });
+      return res.status(404).json({ error: 'No students found' });
     }
 
     const pages = Math.ceil(count / perPage);
     return res.json({ students, pages, count });
+  }
+
+  async read(req, res) {
+    const { id } = req.params;
+
+    const student = await Student.findByPk(id);
+
+    if (!student) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+
+    const { name, email, age, height, weight } = student;
+
+    return res.json({ student: { name, email, age, height, weight } });
   }
 
   async store(req, res) {
@@ -101,7 +115,7 @@ class StudentController {
       return res.status(404).json({ error: 'Student does not exists' });
     }
 
-    if (email) {
+    if (email && email !== student.email) {
       const registered = await Student.findOne({ where: { email } });
       if (registered) {
         return res.status(404).json({ error: 'Email is already in use' });
