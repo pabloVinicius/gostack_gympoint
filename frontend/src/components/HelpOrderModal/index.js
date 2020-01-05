@@ -1,13 +1,24 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 import PropTypes from 'prop-types';
 import MainButton from '../MainButton';
 
 import { Wrapper, Container } from './styles';
 
-const HelpOrderModal = ({ id, onClose }) => {
-  const [response, changeResponse] = useState('');
+const HelpOrderModal = ({ question, onClose, onSubmit }) => {
   const wrapperRef = useRef();
+
+  const formik = useFormik({
+    initialValues: {
+      answer: '',
+    },
+    validationSchema: yup.object().shape({
+      answer: yup.string().required('Digite uma resposta'),
+    }),
+    onSubmit: ({ answer }) => onSubmit(answer),
+  });
 
   const onBackdropClick = e => {
     if (e.target === wrapperRef.current) {
@@ -20,22 +31,21 @@ const HelpOrderModal = ({ id, onClose }) => {
       <Container>
         <div>
           <label>Pergunta do aluno</label>
-          <p>
-            Olá pessoal da academia, gostaria de saber se quando acordar devo
-            ingerir batata doce e frango logo de primeira, preparar as marmitas
-            e lotar a geladeira? Dou um pico de insulina e jogo o hipercalórico?
-          </p>
+          <p>{question}</p>
         </div>
-        <div>
-          <label>Sua resposta</label>
-          <textarea
-            placeholder="Sua resposta aqui"
-            onChange={e => changeResponse(e.target.value)}
-          >
-            {response}
-          </textarea>
-        </div>
-        <MainButton>Responder aluno</MainButton>
+        <form onSubmit={formik.handleSubmit}>
+          <div>
+            <label>Sua resposta</label>
+            <textarea
+              placeholder="Sua resposta aqui"
+              name="answer"
+              value={formik.values.answer}
+              onChange={formik.handleChange}
+            />
+            <span>{formik.errors.answer}</span>
+          </div>
+          <MainButton type="submit">Responder aluno</MainButton>
+        </form>
       </Container>
     </Wrapper>
   );
@@ -43,11 +53,13 @@ const HelpOrderModal = ({ id, onClose }) => {
 
 HelpOrderModal.defaultProps = {
   onClose: () => {},
+  onSubmit: () => {},
 };
 
 HelpOrderModal.propTypes = {
-  id: PropTypes.string.isRequired,
+  question: PropTypes.string.isRequired,
   onClose: PropTypes.func,
+  onSubmit: PropTypes.func,
 };
 
 export default HelpOrderModal;

@@ -66,3 +66,17 @@ export const Wrapper = styled.div`
     margin-bottom: 1.25rem;
   }
 `;
+
+export const Header = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    color: #444444;
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+  }
+`;

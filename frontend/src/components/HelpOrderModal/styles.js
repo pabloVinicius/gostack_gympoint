@@ -53,4 +53,10 @@ export const Container = styled.div`
     line-height: 1.1875em;
     padding: 0.8125rem 0.9375rem;
   }
+
+  & span {
+    font-size: 0.75rem;
+    margin-top: 0.3125rem;
+    color: orangered;
+  }
 `;
