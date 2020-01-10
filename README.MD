@@ -21,3 +21,5 @@
 * I've used Formik instead Unform because I find easier to control some field based on its state (like the gray fields that are calculated automatically based on other fields)
 
 #### Back-end
+* I've stored the plan price in cents because I find easier to manage it (at my work we defined this pattern and it have been working well)
+* I've created textualPrice and totalPrice virtual fields with the redable price
